@@ -1,0 +1,53 @@
+﻿@page "/"
+@using CorsoBlazor.Components;
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<SurveyPrompt Title="How is Blazor working for you?" />
+
+@*<Alert Show="@ShowAlert">
+        <span class="oi oi-check mr-2" aria-hidden="true"></span>
+        <strong>Added Alert</strong></Alert>
+    <Timer TimeInSeconds="5" Tick="@ToggleAlert"/>
+    <button @onclick="@ToggleAlert">Toggle</button>*@
+
+<DismissableAlert @ref="alert" @bind-Show="@ShowAlert">
+    <span class="oi oi-check mr-2" aria-hidden="true"></span>
+    <strong>Extra Added Alert</strong>
+</DismissableAlert>
+<Timer TimeInSeconds="5" Tick="@ToggleAlert" />
+<button @onclick="@ToggleAlert">Toggle</button>
+<GrandMother>
+    <GrandChild/>
+    <DismissableAlert Show="true">
+        <GrandChild/>
+    </DismissableAlert>
+</GrandMother>
+
+@code{
+    CorsoBlazor.Components.DismissableAlert x;
+
+    private DismissableAlert alert;
+    //private bool showAlert = true;
+    //public bool ShowAlert
+    //{
+    //    get => showAlert;
+    //    set
+    //    {
+    //        if(value!= showAlert)
+    //        {
+    //            showAlert = value;
+    //            // this.StateHasChanged();
+    //        }
+    //    }
+    //}
+    public bool ShowAlert { get; set; } = true;
+    public void ToggleAlert() => ShowAlert = !ShowAlert;
+    //public void ToggleAlert()
+    //{
+    //    Console.WriteLine("+++");
+    //    ShowAlert = !ShowAlert;
+    //}
+}

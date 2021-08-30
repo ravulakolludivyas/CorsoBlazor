@@ -1,0 +1,17 @@
+﻿<h3>GrandMother</h3>
+@data.Count
+<CascadingValue Value="@this.data" Name="gm">
+    @ChildContent
+</CascadingValue>
+
+@code {
+    
+    public CounterData data = new CounterData { Count = 10 };
+    protected override void OnInitialized()
+    {
+        this.data.CountChanged += (newCount) =>
+        this.StateHasChanged();
+    }
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+}

@@ -1,0 +1,135 @@
+@page "/counter"
+@using System;
+@using System.Collections.Generic;
+@using System.Linq;
+@using System.Threading.Tasks;
+@using System.Threading;
+@using Microsoft.AspNetCore.Components;
+
+
+<h1>Counter</h1>
+
+<p>
+    Current count:
+    <span class="@backgroundColor">
+        @currentCount
+    </span>
+</p>
+<p>
+    <input type="number" @bind="@increment" />
+    @*<input type="number" @bind="@increment" @onkeypress="KeyHandler" @onkeypress:preventDefault="true" />*@
+</p>
+<p>
+    <h1>Date Format</h1>
+    <input @bind="Today" @bind:format="dd-MM-yyyy" />
+    <button class="btn btn-primary" @onclick="IncrementDate">Next Day</button>
+</p>
+
+@*<p>
+        <input type="number" value= "@increment" onchange="@((ChangeEventArgs e)=> increment = int.Parse($"{e.Value}"))"/>//Verbose elegant solution
+        <input type="number" @bind="@increment" @bind:event="oninput" /> //explicit handling to events
+
+    </p>*@
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+<button class="btn btn-secondary" @onclick="AutoIncrement">Auto Increment</button>
+
+@* //for using lambda function using c hash
+    <button class="btn btn-primary"
+            disabled="@(currentCount >=10)"
+            @onclick="@(() => currentCount+=1)">
+        Max!10
+    </button>*@
+
+@*<button class="btn btn-primary"
+            disabled="@(currentCount >=10)"
+            @onclick="IncrementCount">
+        Max10
+    </button>*@
+
+@*//for event count just keep @//
+    <button class="btn btn-primary" @onclick="@IncrementCount">Click me</button>*@
+<div style="width: 400px; height: 400px; background: yellow"
+     @onmousemove="OuterMouseMove">
+    @outerPos
+
+    <div style="width: 300px; height: 300px; background: green; margin:50px"
+         @onmousemove="InnerMouseMove">
+        @innerPos
+    </div>
+</div>
+
+@code {
+        private DateTime Today { get; set; } = DateTime.Now;
+        private void IncrementDate() => Today = Today.AddDays(1);
+        private string outerPos = "Nothing yet";
+        private void OuterMouseMove(MouseEventArgs e)
+            => outerPos = $"Mouse last at{e.ClientX}x{e.ClientY}";
+
+        private string innerPos = "Nothing yet";
+        private void InnerMouseMove(MouseEventArgs e)
+            => outerPos = $"Mouse last at{e.ClientX}x{e.ClientY}";
+
+
+        private int currentCount = 0;
+        private int increment = 1;
+
+        //int currentCount = 0;
+        private string backgroundColor = "red-background";
+
+
+        //private void IncrementCount()
+        //////void IncrementCount()
+        //{
+        //    currentCount++;
+        //    backgroundColor = (currentCount % 2 == 0) ?
+        //        "red-background" : "yellow-background";
+        //}
+
+        private void IncrementCount()
+        ////void IncrementCount()
+        {
+            Console.WriteLine("++");
+            currentCount += increment;
+            backgroundColor = (currentCount % 2 == 0) ?
+                "red-background" : "yellow-background";
+        }
+
+        private void AutoIncrement()
+        ////void IncrementCount()
+        {
+            var timer = new System.Threading.Timer(
+               callback: (_) => 
+    {
+    IncrementCount();
+            this.StateHasChanged();
+        },
+state: null,
+        dueTime: TimeSpan.FromSeconds(1),
+        period: TimeSpan.FromSeconds(1))
+    ;
+    }
+
+
+
+    ////example for MouseEventArgs
+    //private void IncrementCount(MouseEventArgs e)
+    //{
+    //    currentCount += increment;
+    //    backgroundColor = (currentCount % 2 == 0) ?
+    //        "red-background" : "yellow-background";
+    //}
+
+    //private void KeyHandler(KeyboardEventArgs e)
+    //{
+    //    Console.WriteLine(e.Code);
+    //    if (e.Key == "+")
+    //    {
+    //        increment += 1;
+    //    }
+    //    if (e.Key == "-")
+    //    {
+    //        increment -= 1;
+    //    }
+    //}
+}
